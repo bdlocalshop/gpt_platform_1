@@ -20,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->statefulApi();
         $middleware->alias([
             'anti_fraud' => \App\Http\Middleware\EnforceAntiFraudGuard::class,
+            'verify_postback_ip' => \App\Http\Middleware\VerifyPostbackIpWhitelist::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

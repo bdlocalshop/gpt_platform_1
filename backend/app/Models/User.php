@@ -93,6 +93,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(FraudFlag::class);
     }
 
+    public function postbacks(): HasMany
+    {
+        return $this->hasMany(Postback::class);
+    }
+
     public function isEmailVerified(): bool
     {
         return !is_null($this->email_verified_at);

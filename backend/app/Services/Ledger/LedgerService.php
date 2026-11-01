@@ -381,6 +381,22 @@ class LedgerService
         $refreshed = Account::find($availableAccount->id);
         if ($refreshed && bccomp($refreshed->balance, '0.0000', 4) < 0) {
             User::where('id', $userId)->update(['status' => 'suspended']);
+
+            \App\Models\FraudFlag::firstOrCreate(
+                [
+                    'user_id' => $userId,
+                    'flag_type' => \App\Models\FraudFlag::TYPE_NEGATIVE_BALANCE_HOLD,
+                    'is_resolved' => false,
+                ],
+                [
+                    'severity' => \App\Models\FraudFlag::SEVERITY_CRITICAL,
+                    'details' => [
+                        'negative_balance' => $refreshed->balance,
+                        'provider' => $provider,
+                        'external_tx_id' => $externalTxId,
+                    ],
+                ]
+            );
         }
 
         return $tx;

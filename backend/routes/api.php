@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\Offers\OfferController;
+use App\Http\Controllers\Api\V1\Postbacks\PostbackController;
 use App\Http\Controllers\Api\V1\Wallet\WalletController;
 use App\Services\Fraud\AntiFraudService;
 use Illuminate\Http\JsonResponse;
@@ -78,6 +80,27 @@ Route::prefix('v1')->group(function () {
     // Wallet Endpoints
     Route::middleware(['auth:sanctum', 'anti_fraud:wallet'])->prefix('wallet')->group(function () {
         Route::get('/balance', [WalletController::class, 'balance']);
+    });
+
+    // Offers & Offerwall Endpoints
+    Route::middleware(['auth:sanctum', 'anti_fraud:offers'])->prefix('offers')->group(function () {
+        Route::get('/providers', [OfferController::class, 'providers']);
+        Route::get('/featured', [OfferController::class, 'featuredOffers']);
+    });
+
+    // Postback S2S Webhooks
+    Route::prefix('postbacks')->group(function () {
+        Route::match(['get', 'post'], '/bitlabs', [PostbackController::class, 'handleBitLabs'])
+            ->middleware('verify_postback_ip:bitlabs');
+
+        Route::match(['get', 'post'], '/cpx', [PostbackController::class, 'handleCpx'])
+            ->middleware('verify_postback_ip:cpx');
+
+        Route::match(['get', 'post'], '/offerwall-gg', [PostbackController::class, 'handleOfferwallGg'])
+            ->middleware('verify_postback_ip:offerwall_gg');
+
+        Route::match(['get', 'post'], '/offerwall-com', [PostbackController::class, 'handleOfferwallCom'])
+            ->middleware('verify_postback_ip:offerwall_com');
     });
 
     // Fraud Diagnostics & IP Reputation Endpoint

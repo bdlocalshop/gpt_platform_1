@@ -14,6 +14,7 @@ class FraudFlag extends Model
     public const TYPE_MULTI_ACCOUNT_IP = 'multi_account_ip';
     public const TYPE_VPN_DETECTED = 'vpn_detected';
     public const TYPE_REUSED_CRYPTO_ADDRESS = 'reused_crypto_address';
+    public const TYPE_NEGATIVE_BALANCE_HOLD = 'negative_balance_hold';
 
     public const SEVERITY_LOW = 'low';
     public const SEVERITY_MEDIUM = 'medium';

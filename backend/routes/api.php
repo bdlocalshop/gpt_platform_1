@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Offers\OfferController;
 use App\Http\Controllers\Api\V1\Postbacks\PostbackController;
+use App\Http\Controllers\Api\V1\Referrals\ReferralController;
 use App\Http\Controllers\Api\V1\Wallet\WalletController;
 use App\Services\Fraud\AntiFraudService;
 use Illuminate\Http\JsonResponse;
@@ -80,6 +81,12 @@ Route::prefix('v1')->group(function () {
     // Wallet Endpoints
     Route::middleware(['auth:sanctum', 'anti_fraud:wallet'])->prefix('wallet')->group(function () {
         Route::get('/balance', [WalletController::class, 'balance']);
+        Route::get('/transactions', [WalletController::class, 'transactions']);
+    });
+
+    // Referrals Endpoints
+    Route::middleware(['auth:sanctum', 'anti_fraud:referrals'])->prefix('referrals')->group(function () {
+        Route::get('/', [ReferralController::class, 'index']);
     });
 
     // Offers & Offerwall Endpoints

@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api\V1\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Services\Auth\DeviceFingerprintService;
+use App\Services\Ledger\LedgerService;
 use App\Traits\ApiResponse;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
@@ -21,7 +23,8 @@ class AuthController extends Controller
     use ApiResponse;
 
     public function __construct(
-        protected DeviceFingerprintService $deviceService
+        protected DeviceFingerprintService $deviceService,
+        protected LedgerService $ledgerService
     ) {}
 
     /**
@@ -197,13 +200,30 @@ class AuthController extends Controller
             ], 'Email address is already verified.');
         }
 
+        $creditedBonus = false;
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
+
+            // Award one-time signup bonus (100.0000 Points = $0.10 USD)
+            $alreadyAwarded = Transaction::where('type', Transaction::TYPE_SIGNUP_BONUS)
+                ->where('reference_id', (string) $user->id)
+                ->exists();
+
+            if (!$alreadyAwarded) {
+                $this->ledgerService->creditSignupBonus(
+                    user: $user,
+                    amount: '100.0000',
+                    description: 'Welcome bonus for email verification'
+                );
+                $creditedBonus = true;
+            }
         }
 
         return $this->success([
             'verified' => true,
-        ], 'Email address verified successfully. Welcome bonus will be processed.');
+            'bonus_credited' => $creditedBonus,
+            'bonus_points' => $creditedBonus ? '100.0000' : '0.0000',
+        ], 'Email address verified successfully. Welcome bonus of 100 Points ($0.10) credited.');
     }
 
     /**

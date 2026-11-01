@@ -1,0 +1,65 @@
+Phase-by-Phase Roadmap to Build Your GPT Platform
+Phase 1: Environment Setup & Core Foundations
+Repository Setup: Monorepo or dual-repo (/backend Laravel 11+, /frontend Next.js 15+ App Router).
+
+Database & Cache: Deploy PostgreSQL 16+ and Redis. Configure strictly typed database connection environments.
+
+Authentication Engine: Set up Laravel Sanctum for API token/cookie authentication with email verification workflows and device fingerprint headers.
+
+Basic Frontend Shell: Scaffold Next.js layout, Tailwind CSS, dark/light theme, and auth pages (Register, Login, Email Verify).
+
+Phase 2: Double-Entry Ledger & Financial Engine
+Migrations: Create accounts, transactions, ledger_entries, and payout_requests tables.
+
+Ledger Invariants: Build LedgerService with pessimistic locking (lockForUpdate()) inside atomic database transactions (DB::transaction).
+
+Account Types: Configure operational accounts: user_available, user_locked, platform_liability, and platform_revenue.
+
+Testing: Write automated tests simulating concurrent ledger balance mutations and double-spend race conditions.
+
+Phase 3: Anti-Fraud & Request Inspection Middleware
+Proxy & VPN Filter: Integrate ProxyCheck.io API client and local MaxMind GeoLite2 reader.
+
+Guard Middleware: Block suspicious subnets, datacenters, and Tor exit nodes during registration and authenticated API requests.
+
+Device & IP Fingerprint Tracker: Store client headers, user-agent hashes, and IP history to flag multi-accounting and address collisions.
+
+Phase 4: S2S Postback Handlers & Offerwall Integration
+Webhook Architecture: Build dedicated endpoints for BitLabs, CPX Research, Offerwall.gg, and Offerwall.com:
+
+/api/v1/postbacks/bitlabs
+
+/api/v1/postbacks/cpx
+
+/api/v1/postbacks/offerwall-gg
+
+/api/v1/postbacks/offerwall-com
+
+Signature & IP Whitelist: Implement middleware checking provider-specific HMAC/MD5 secrets with hash_equals() and verify source IP CIDR ranges.
+
+Deduplication & Reversals: Enforce UNIQUE(provider, external_transaction_id) and wire negative payouts (status = -1) directly to clawback ledger deductions.
+
+Offerwall UI: Embed iFrames dynamically in Next.js and build a direct campaign API worker to pull top featured tasks.
+
+Phase 5: Retention, Referrals & User Wallet
+Bonus Allocation: Automate one-time signup bonus release upon email verification.
+
+Referral Logic: Implement referral attribution with maturity checks (referral bonus unlocks only after the referee earns 1,000 verified points).
+
+Wallet Interface: Build Next.js balance dashboard with real-time transaction history and ledger breakdown.
+
+Phase 6: Crypto Cashout & Administration Panel
+Withdrawal Request Flow: Build crypto payout submission forms (USDT, LTC, BTC) with wallet address validation.
+
+Balance Locking: Move requested points from user_available to user_locked.
+
+Admin Dashboard: Build management panel (Filament or custom Next.js admin) for review queues, chargeback audit logs, user bans, and manual withdrawal approvals.
+
+Automated Dispatch (Optional): Integrate crypto disbursement API (e.g., Cryptomus, NOWPayments, or direct RPC wallet nodes) for verified accounts.
+
+Phase 7: Load Testing, Security Audits & Production Deployment
+Postback Stress Tests: Run high-concurrency webhook replay and spike tests to confirm zero balance leakage or duplicate credits.
+
+Infrastructure Deployment: Deploy Laravel API on a secure Linux VPS / Docker cluster and Next.js frontend on Vercel.
+
+Monitoring & Alerts: Setup Sentry for error tracking and Telegram/Slack webhooks for flagged high-value withdrawals or sudden postback spikes.

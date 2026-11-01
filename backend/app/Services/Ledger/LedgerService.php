@@ -544,6 +544,7 @@ class LedgerService
 
         return [
             'is_balanced' => $isBalanced,
+            'is_reconciled' => $isBalanced,
             'total_debits' => $totalDebits,
             'total_credits' => $totalCredits,
             'discrepancy' => bcsub($totalDebits, $totalCredits, 4),

@@ -240,6 +240,14 @@ export default function WalletPage() {
           </button>
 
           <Link
+            href="/wallet/cashout"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-600 text-white shadow-md shadow-amber-500/20 transition"
+          >
+            <Coins className="w-3.5 h-3.5" />
+            Cash Out Crypto
+          </Link>
+
+          <Link
             href="/offers"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/20 transition"
           >
@@ -365,7 +373,7 @@ export default function WalletPage() {
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase">
             <CheckCircle2 className="w-4 h-4" />
-            Instant Crypto Withdrawals Coming Soon
+            Instant Crypto Withdrawals Active
           </div>
           <h3 className="text-xl sm:text-2xl font-black">
             Ready to Cash Out Your Points?
@@ -383,10 +391,10 @@ export default function WalletPage() {
             Invite & Earn 500 PTS
           </Link>
           <Link
-            href="/offers"
+            href="/wallet/cashout"
             className="px-5 py-2.5 rounded-xl font-bold text-xs bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/20 transition"
           >
-            Browse High-Yield Tasks
+            Cash Out to Crypto
           </Link>
         </div>
       </div>

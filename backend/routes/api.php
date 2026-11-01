@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\AdminController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Offers\OfferController;
 use App\Http\Controllers\Api\V1\Postbacks\PostbackController;
 use App\Http\Controllers\Api\V1\Referrals\ReferralController;
+use App\Http\Controllers\Api\V1\Wallet\PayoutController;
 use App\Http\Controllers\Api\V1\Wallet\WalletController;
 use App\Services\Fraud\AntiFraudService;
 use Illuminate\Http\JsonResponse;
@@ -82,6 +84,20 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:sanctum', 'anti_fraud:wallet'])->prefix('wallet')->group(function () {
         Route::get('/balance', [WalletController::class, 'balance']);
         Route::get('/transactions', [WalletController::class, 'transactions']);
+        Route::get('/payouts', [PayoutController::class, 'index']);
+        Route::post('/payouts', [PayoutController::class, 'store']);
+    });
+
+    // Admin Panel Endpoints (Protected by Sanctum + is_admin)
+    Route::middleware(['auth:sanctum', 'is_admin'])->prefix('admin')->group(function () {
+        Route::get('/stats', [AdminController::class, 'stats']);
+        Route::get('/payouts', [AdminController::class, 'payouts']);
+        Route::post('/payouts/{id}/approve', [AdminController::class, 'approvePayout']);
+        Route::post('/payouts/{id}/reject', [AdminController::class, 'rejectPayout']);
+        Route::get('/users', [AdminController::class, 'users']);
+        Route::post('/users/{id}/status', [AdminController::class, 'updateUserStatus']);
+        Route::get('/fraud-flags', [AdminController::class, 'fraudFlags']);
+        Route::post('/fraud-flags/{id}/resolve', [AdminController::class, 'resolveFraudFlag']);
     });
 
     // Referrals Endpoints

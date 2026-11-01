@@ -32,6 +32,7 @@ export function Navbar() {
     { name: "Wallet", href: "/wallet", icon: Wallet },
     { name: "Referrals", href: "/referrals", icon: Users },
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    ...(user?.role === "admin" ? [{ name: "Admin Panel", href: "/admin", icon: ShieldCheck }] : []),
   ];
 
   return (

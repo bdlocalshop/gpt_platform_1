@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'anti_fraud' => \App\Http\Middleware\EnforceAntiFraudGuard::class,
             'verify_postback_ip' => \App\Http\Middleware\VerifyPostbackIpWhitelist::class,
+            'is_admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

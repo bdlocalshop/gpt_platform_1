@@ -52,8 +52,8 @@ return new class extends Migration
             $table->string('client_platform', 64)->nullable();
             $table->text('user_agent')->nullable();
             $table->string('ip_address', 45);
-            $table->timestamp('first_seen_at');
-            $table->timestamp('last_seen_at');
+            $table->timestamp('first_seen_at')->useCurrent();
+            $table->timestamp('last_seen_at')->useCurrent();
             $table->boolean('is_trusted')->default(true);
             $table->boolean('is_flagged')->default(false);
             $table->timestamps();

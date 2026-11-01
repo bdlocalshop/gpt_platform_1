@@ -31,4 +31,13 @@ return [
         ],
     ],
 
+    'proxycheck' => [
+        'key' => env('PROXYCHECK_API_KEY'),
+    ],
+
+    'maxmind' => [
+        'license_key' => env('MAXMIND_LICENSE_KEY'),
+        'db_path' => env('MAXMIND_DB_PATH', storage_path('app/geoip')),
+    ],
+
 ];

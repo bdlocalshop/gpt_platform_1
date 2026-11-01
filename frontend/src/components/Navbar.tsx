@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 
 export function Navbar() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout, walletBalance } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -95,7 +95,7 @@ export function Navbar() {
                       @{user.username}
                     </p>
                     <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
-                      0 Points
+                      {Number(walletBalance?.points.available || 0).toLocaleString()} PTS
                     </p>
                   </div>
                 </button>

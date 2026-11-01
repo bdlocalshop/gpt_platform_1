@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\Wallet\WalletController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
@@ -68,5 +69,10 @@ Route::prefix('v1')->group(function () {
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::post('/email/resend', [AuthController::class, 'resendVerification'])->middleware('throttle:6,1');
         });
+    });
+
+    // Wallet Endpoints
+    Route::middleware('auth:sanctum')->prefix('wallet')->group(function () {
+        Route::get('/balance', [WalletController::class, 'balance']);
     });
 });

@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 export default function DashboardPage() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, walletBalance } = useAuth();
 
   if (isLoading) {
     return (
@@ -131,10 +131,10 @@ export default function DashboardPage() {
             </div>
           </div>
           <p className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-            0 <span className="text-sm font-semibold text-slate-400">PTS</span>
+            {Number(walletBalance?.points.available || 0).toLocaleString()} <span className="text-sm font-semibold text-slate-400">PTS</span>
           </p>
           <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-1">
-            ≈ $0.00 USD
+            ≈ ${Number(walletBalance?.fiat_equivalent.available || 0).toFixed(2)} USD
           </p>
         </div>
 
@@ -149,10 +149,10 @@ export default function DashboardPage() {
             </div>
           </div>
           <p className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-            0 <span className="text-sm font-semibold text-slate-400">PTS</span>
+            {Number(walletBalance?.points.locked || 0).toLocaleString()} <span className="text-sm font-semibold text-slate-400">PTS</span>
           </p>
           <p className="text-xs text-slate-500 mt-1">
-            Pending cashout requests
+            ≈ ${Number(walletBalance?.fiat_equivalent.locked || 0).toFixed(2)} USD in review
           </p>
         </div>
 

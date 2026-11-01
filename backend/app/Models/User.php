@@ -73,6 +73,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(User::class, 'referred_by_id');
     }
 
+    public function accounts(): HasMany
+    {
+        return $this->hasMany(Account::class);
+    }
+
+    public function payoutRequests(): HasMany
+    {
+        return $this->hasMany(PayoutRequest::class);
+    }
+
     public function isEmailVerified(): bool
     {
         return !is_null($this->email_verified_at);

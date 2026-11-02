@@ -17,7 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->statefulApi();
+        $middleware->validateCsrfTokens(except: [
+            'api/*',
+        ]);
         $middleware->alias([
             'anti_fraud' => \App\Http\Middleware\EnforceAntiFraudGuard::class,
             'verify_postback_ip' => \App\Http\Middleware\VerifyPostbackIpWhitelist::class,

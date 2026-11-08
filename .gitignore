@@ -19,3 +19,5 @@ frontend/.env.production.local
 # OS files
 .DS_Store
 Thumbs.db
+
+GPT_Platform_1_notes/*
